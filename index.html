@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discord Embed Sender</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c2f33;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        input, textarea, button {
+            margin: 8px 0;
+            padding: 10px;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background-color: #7289da;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5b6eae;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>ส่ง Discord Embed แบบกำหนดเอง</h1>
+
+    <input type="text" id="webhookUrl" placeholder="วาง Discord Webhook URL ของคุณที่นี่">
+
+    <label>Title:</label>
+    <input type="text" id="embedTitle" placeholder="Title ของ Embed">
+
+    <label>Description:</label>
+    <textarea id="embedDescription" placeholder="ข้อความของ Embed"></textarea>
+
+    <label>Color (HEX, เช่น 7289da):</label>
+    <input type="text" id="embedColor" placeholder="สี HEX">
+
+    <label>Image URL:</label>
+    <input type="text" id="embedImage" placeholder="URL ของรูปภาพ">
+
+    <label>Footer Text:</label>
+    <input type="text" id="embedFooter" placeholder="ข้อความ Footer">
+
+    <button onclick="sendWebhook()">ส่ง Embed</button>
+
+    <script>
+        async function sendWebhook() {
+            const webhookUrl = document.getElementById('webhookUrl').value;
+            const title = document.getElementById('embedTitle').value;
+            const description = document.getElementById('embedDescription').value;
+            const colorHex = document.getElementById('embedColor').value || '7289da';
+            const imageUrl = document.getElementById('embedImage').value;
+            const footerText = document.getElementById('embedFooter').value;
+
+            if (!webhookUrl) {
+                alert("กรุณาใส่ Webhook URL!");
+                return;
+            }
+
+            const embed = {
+                title: title || "ไม่มี Title",
+                description: description || "ไม่มี Description",
+                color: parseInt(colorHex, 16),
+                timestamp: new Date(),
+                footer: { text: footerText || "" },
+            };
+
+            if (imageUrl) embed.image = { url: imageUrl };
+
+            try {
+                const response = await fetch(webhookUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ embeds: [embed] })
+                });
+
+                if (response.ok) {
+                    alert("ส่ง Embed เรียบร้อย!");
+                } else {
+                    alert("เกิดข้อผิดพลาด: " + response.statusText);
+                }
+            } catch (error) {
+                alert("เกิดข้อผิดพลาด: " + error);
+            }
+        }
+    </script>
+</body>
+</html>
