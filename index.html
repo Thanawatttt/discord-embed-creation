@@ -1,107 +1,238 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord Embed Sender</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2c2f33;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        input, textarea, button {
-            margin: 8px 0;
-            padding: 10px;
-            width: 100%;
-            max-width: 500px;
-            border-radius: 5px;
-            border: none;
-        }
-        button {
-            background-color: #7289da;
-            color: white;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #5b6eae;
-        }
-        textarea {
-            resize: vertical;
-            height: 120px;
-        }
-        label {
-            display: block;
-            margin-top: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discord Embed Builder - Lunarmine</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;700&display=swap" rel="stylesheet">
+<style>
+    /* Base */
+    body {
+        font-family: 'Noto Sans Thai', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #1e1e2f;
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    h1 {
+        margin-top: 20px;
+        font-size: 2em;
+        color: #ffffff;
+        text-align: center;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 20px;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    .form-section, .preview-section {
+        background: #2c2f40;
+        border-radius: 12px;
+        padding: 20px;
+        margin: 10px;
+        flex: 1 1 400px;
+        min-width: 350px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        transition: transform 0.3s;
+    }
+
+    .form-section:hover {
+        transform: translateY(-5px);
+    }
+
+    input, textarea, button {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 8px;
+        border: none;
+        font-family: 'Noto Sans Thai', sans-serif;
+    }
+
+    input[type="color"] {
+        padding: 0;
+        height: 40px;
+        width: 60px;
+        cursor: pointer;
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+        background: #1f1f2d;
+        color: #fff;
+    }
+
+    button {
+        background: linear-gradient(90deg,#7289da,#5b6eae);
+        color: #fff;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: linear-gradient(90deg,#5b6eae,#7289da);
+    }
+
+    label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+    }
+
+    /* Preview embed */
+    .embed-preview {
+        background: #23272a;
+        border-left: 6px solid #7289da;
+        border-radius: 8px;
+        padding: 15px;
+        margin-top: 10px;
+        transition: all 0.3s;
+        overflow-wrap: break-word;
+    }
+
+    .embed-title {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin-bottom: 8px;
+    }
+
+    .embed-description {
+        margin-bottom: 10px;
+        white-space: pre-wrap;
+    }
+
+    .embed-field {
+        background: #2c2f40;
+        padding: 8px;
+        border-radius: 6px;
+        margin-bottom: 6px;
+    }
+
+    .embed-footer, .embed-author, .embed-timestamp {
+        font-size: 0.8em;
+        color: #bbbbbb;
+    }
+
+    .color-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .color-row input[type="color"] {
+        margin-left: 10px;
+    }
+
+</style>
 </head>
 <body>
-    <h1>ส่ง Discord Embed แบบกำหนดเอง</h1>
 
-    <input type="text" id="webhookUrl" placeholder="วาง Discord Webhook URL ของคุณที่นี่">
+<h1>Discord Embed Builder - Lunarmine</h1>
+<div class="container">
+    <!-- Form Section -->
+    <div class="form-section">
+        <label>Webhook URL</label>
+        <input type="text" id="webhookUrl" placeholder="วาง Discord Webhook URL ของคุณ">
 
-    <label>Title:</label>
-    <input type="text" id="embedTitle" placeholder="Title ของ Embed">
+        <label>Title</label>
+        <input type="text" id="embedTitle" placeholder="Title ของ Embed">
 
-    <label>Description:</label>
-    <textarea id="embedDescription" placeholder="ข้อความของ Embed"></textarea>
+        <label>Description</label>
+        <textarea id="embedDescription" placeholder="ข้อความของ Embed"></textarea>
 
-    <label>Color (HEX, เช่น 7289da):</label>
-    <input type="text" id="embedColor" placeholder="สี HEX">
+        <label>Color</label>
+        <div class="color-row">
+            <span>เลือกสี:</span>
+            <input type="color" id="embedColor" value="#7289da">
+        </div>
 
-    <label>Image URL:</label>
-    <input type="text" id="embedImage" placeholder="URL ของรูปภาพ">
+        <label>Image URL</label>
+        <input type="text" id="embedImage" placeholder="URL ของรูปภาพ">
 
-    <label>Footer Text:</label>
-    <input type="text" id="embedFooter" placeholder="ข้อความ Footer">
+        <label>Footer Text</label>
+        <input type="text" id="embedFooter" placeholder="ข้อความ Footer">
 
-    <button onclick="sendWebhook()">ส่ง Embed</button>
+        <label>Author</label>
+        <input type="text" id="embedAuthor" placeholder="Author Name">
 
-    <script>
-        async function sendWebhook() {
-            const webhookUrl = document.getElementById('webhookUrl').value;
-            const title = document.getElementById('embedTitle').value;
-            const description = document.getElementById('embedDescription').value;
-            const colorHex = document.getElementById('embedColor').value || '7289da';
-            const imageUrl = document.getElementById('embedImage').value;
-            const footerText = document.getElementById('embedFooter').value;
+        <button onclick="updatePreview()">Preview Embed</button>
+        <button onclick="sendWebhook()">Send Embed</button>
+    </div>
 
-            if (!webhookUrl) {
-                alert("กรุณาใส่ Webhook URL!");
-                return;
-            }
+    <!-- Preview Section -->
+    <div class="preview-section">
+        <h2>Preview</h2>
+        <div id="preview" class="embed-preview">
+            <div id="previewAuthor" class="embed-author"></div>
+            <div id="previewTitle" class="embed-title"></div>
+            <div id="previewDescription" class="embed-description"></div>
+            <img id="previewImage" src="" style="max-width:100%;border-radius:6px;">
+            <div id="previewFooter" class="embed-footer"></div>
+            <div id="previewTimestamp" class="embed-timestamp"></div>
+        </div>
+    </div>
+</div>
 
-            const embed = {
-                title: title || "ไม่มี Title",
-                description: description || "ไม่มี Description",
-                color: parseInt(colorHex, 16),
-                timestamp: new Date(),
-                footer: { text: footerText || "" },
-            };
+<script>
+function updatePreview() {
+    document.getElementById('previewTitle').innerText = document.getElementById('embedTitle').value;
+    document.getElementById('previewDescription').innerText = document.getElementById('embedDescription').value;
+    document.getElementById('previewImage').src = document.getElementById('embedImage').value || '';
+    document.getElementById('previewFooter').innerText = document.getElementById('embedFooter').value;
+    document.getElementById('previewAuthor').innerText = document.getElementById('embedAuthor').value;
+    document.getElementById('previewTimestamp').innerText = new Date().toLocaleString();
 
-            if (imageUrl) embed.image = { url: imageUrl };
+    // Update color border
+    document.getElementById('preview').style.borderLeftColor = document.getElementById('embedColor').value;
+}
 
-            try {
-                const response = await fetch(webhookUrl, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ embeds: [embed] })
-                });
+async function sendWebhook() {
+    const webhookUrl = document.getElementById('webhookUrl').value;
+    if(!webhookUrl){
+        alert("กรุณาใส่ Webhook URL!");
+        return;
+    }
 
-                if (response.ok) {
-                    alert("ส่ง Embed เรียบร้อย!");
-                } else {
-                    alert("เกิดข้อผิดพลาด: " + response.statusText);
-                }
-            } catch (error) {
-                alert("เกิดข้อผิดพลาด: " + error);
-            }
+    const embed = {
+        title: document.getElementById('embedTitle').value,
+        description: document.getElementById('embedDescription').value,
+        color: parseInt(document.getElementById('embedColor').value.replace('#',''),16),
+        timestamp: new Date(),
+        footer: { text: document.getElementById('embedFooter').value },
+        author: { name: document.getElementById('embedAuthor').value },
+        image: { url: document.getElementById('embedImage').value }
+    };
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ embeds: [embed] })
+        });
+
+        if(response.ok){
+            alert("ส่ง Embed เรียบร้อย!");
+        } else {
+            alert("เกิดข้อผิดพลาด: "+response.statusText);
         }
-    </script>
+    } catch(err){
+        alert("เกิดข้อผิดพลาด: "+err);
+    }
+}
+
+// Initial preview
+updatePreview();
+</script>
 </body>
 </html>
